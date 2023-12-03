@@ -12,29 +12,27 @@ export default function ProfileHeader() {
     const [timerRunning, setTimerRunning] = useState(true);
     const [newTime, setNewTime] = useState("00:00:00");
 
-    useEffect(()=>{
-        const currentTime = new Date();
-        setNewTime((currentTime.toISOString()).split("T")[1].split(".")[0]);
-
-    },[])
     const handleTimer = () => {
         setTimerRunning(!timerRunning);
-        console.log("timer started", newTime);
     }
     const fetchCountryList = async () => {
         const countries = await fetch(TIME_URL);
         const countriesJson = await countries.json();
-        console.log("countriesJson: ", countriesJson);
         setCountryList(countriesJson);
     }
 
     const fetchCountryTime = async () => {
         const time = await fetch(TIME_URL + selectedCountry);
         const timeJson = await time.json();
-        console.log("timeJson: ", timeJson);
         const timeString = (timeJson.datetime).split("T")[1].split(".")[0];
         setNewTime(timeString);
     }
+
+    useEffect(() => {
+        const currentTime = new Date();
+        setNewTime((currentTime.toISOString()).split("T")[1].split(".")[0]);
+
+    }, []);
 
     useEffect(() => {
         fetchCountryList();
@@ -78,7 +76,7 @@ export default function ProfileHeader() {
     return (
         <div className='profile-header flex jc-sb ai-c'>
             <div className="btn btn-secondary">
-                <Link  to="/" role="button">Back</Link>
+                <Link to="/" role="button">Back</Link>
             </div>
             <div className='profile-header-right flex jc-sb ai-c  '>
                 <select className='country-select' name="country" id="country" value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} >
@@ -89,7 +87,7 @@ export default function ProfileHeader() {
                     }
                 </select>
                 <ClockContainer newTime={newTime} />
-                <button className='btn primary' onClick={handleTimer}>{!timerRunning?"Start":"Pause"}</button>
+                <button className='btn primary' onClick={handleTimer}>{!timerRunning ? "Start" : "Pause"}</button>
             </div>
         </div>
     )

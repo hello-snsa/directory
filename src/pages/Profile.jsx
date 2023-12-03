@@ -29,7 +29,6 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    console.log("incomingData: ", incomingData)
     if (incomingData === null || incomingData === undefined) {
       fetchUserData();
       fetchPostData();
